@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import com.diegoss.workshopmongo.domain.User;
 import com.diegoss.workshopmongo.dto.UserDTO;
 import com.diegoss.workshopmongo.services.UserService;
@@ -36,4 +40,11 @@ public class UserResource {
 		return ResponseEntity.ok().body(dto);
 	}
 	
+	@PostMapping
+	public ResponseEntity<UserDTO> insert(@RequestBody UserDTO dto){
+		var user = service.fromDTO(dto);
+		var obj = service.insert(user);
+		var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).build();
+	}
 }
