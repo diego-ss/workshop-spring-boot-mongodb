@@ -33,13 +33,24 @@ public class UserService {
 		return repository.save(user);
 	}
 	
-	public User fromDTO(UserDTO objDTO) {
-		return new User(objDTO.getId(), objDTO.getName(), objDTO.getEmail());
-	}
-	
 	public void delete(String id) {
 		//se não existir já lança a exceção
 		findById(id);
 		repository.deleteById(id);
+	}
+	
+	public User update(User user) {
+		var oldUser = findById(user.getId());
+		updateData(oldUser, user);
+		return repository.save(oldUser);
+	}
+	
+	public User fromDTO(UserDTO objDTO) {
+		return new User(objDTO.getId(), objDTO.getName(), objDTO.getEmail());
+	}
+	
+	private void updateData(User newObj, User obj) {
+		newObj.setName(obj.getName());
+		newObj.setEmail(obj.getEmail());
 	}
 }
