@@ -27,4 +27,8 @@ public class PostService {
 		var Post = repository.findById(id);
 		return Post.orElseThrow(()-> new ObjectNotFoundException("Objeto não encontrado"));
 	}
+	
+	public List<Post> findByTitle(String title){
+		return repository.findByTitleContainingIgnoreCase(title);
+	}
 }
